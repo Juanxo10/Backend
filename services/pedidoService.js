@@ -107,8 +107,8 @@ async function crearPedido({ bowls, extraItems, frappesAlmond, cliente, metodo_p
       for (let ti = 0; ti < topsArr.length; ti++) {
         const prod = prodMap[topsArr[ti]];
         if (!prod) throw { status: 400, message: `Producto no encontrado: ${topsArr[ti]}` };
-        // Los primeros TOPPINGS_GRATIS son gratis; los demás usan el precio del producto en DB
-        if (ti >= TOPPINGS_GRATIS) bowlPrice += prod.precio > 0 ? prod.precio : TOPPING_EXTRA;
+        // Los primeros TOPPINGS_GRATIS son gratis; los demás cuestan TOPPING_EXTRA (igual que el frontend)
+        if (ti >= TOPPINGS_GRATIS) bowlPrice += TOPPING_EXTRA;
         toppingIds.push(prod.id);
       }
 
@@ -123,8 +123,7 @@ async function crearPedido({ bowls, extraItems, frappesAlmond, cliente, metodo_p
       if (bowl.bev) {
         const prod = prodMap[bowl.bev];
         if (!prod) throw { status: 400, message: `Producto no encontrado: ${bowl.bev}` };
-        bowlPrice += prod.precio;
-        bowlPrice += VASO; // cargo por vaso
+        bowlPrice += VASO; // cargo por vaso (la bebida en sí va incluida, igual que el frontend)
         bebidaId = prod.id;
       }
 
